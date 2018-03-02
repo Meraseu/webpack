@@ -2,19 +2,20 @@ var path = require('path');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var CleanWebpackPlugin = require('clean-webpack-plugin');
-var SpritesmithPlugin = require('webpack-spritesmith');
-
 
 var extractPlugin = new ExtractTextPlugin({
-   filename: 'css/style.css'
+    filename: 'css/style.css'
 });
 
 module.exports = {
-    entry: './src/js/app.js',
+    entry: {
+        'js/css': './src/js/css',
+        'js/images': './src/js/images'
+    },
+    // entry: './src/js/app.js',
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: 'bundle.js',
-        // publicPath: '/dist'
+        filename: '[name].js'
     },
     module: {
         rules: [
@@ -35,7 +36,10 @@ module.exports = {
                     use: [{
                         loader: "css-loader"
                     }, {
-                        loader: "sass-loader"
+                        loader: "sass-loader",
+                        options: {
+                            outputStyle: 'compact'
+                        }
                     }]
                 })
             },
@@ -51,26 +55,26 @@ module.exports = {
                 ]
             },
             {
-                test: /\.(jpg|png)$/,
+                test: /\.(jpe?g|png|gif|svg)$/,
                 use: [
                     {
                         loader: 'file-loader',
                         options: {
                             name: '[name].[ext]',
-                            outputPath: 'img/',
-                            publicPath: 'img/'
+                            outputPath: 'img/'
                         }
-                    }
+                    },
+                    'image-webpack-loader'
                 ]
             }
         ]
     },
-    
     plugins: [
         extractPlugin,
+        new CleanWebpackPlugin(['dist']),
         new HtmlWebpackPlugin({
-            template: 'src/index.html'
-        }),
-        new CleanWebpackPlugin(['dist'])
+            filename: 'index.html',
+            template: 'src/html/index.html'
+        })
     ]
 };
