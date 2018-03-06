@@ -9,10 +9,8 @@ var extractPlugin = new ExtractTextPlugin({
 
 module.exports = {
     entry: {
-        'js/css': './src/js/css',
-        'js/images': './src/js/images'
+        'js/app': './src/js/app'
     },
-    // entry: './src/js/app.js',
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: '[name].js'
