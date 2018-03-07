@@ -1,3 +1,4 @@
+var webpack = require('webpack');
 var path = require('path');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -24,10 +25,11 @@ module.exports = {
                     {
                         loader: 'babel-loader',
                         options: {
-                            presets: ['es2015']
+                            presets: ['env']
                         }
                     }
-                ]
+                ],
+                exclude: /node_modules/,
             },
             {
                 test: /\.scss$/,
