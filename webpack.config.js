@@ -2,6 +2,7 @@ var path = require('path');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var CleanWebpackPlugin = require('clean-webpack-plugin');
+var bourbon = require('node-bourbon').includePaths;
 
 var extractPlugin = new ExtractTextPlugin({
     filename: 'css/style.css'
@@ -36,7 +37,8 @@ module.exports = {
                     }, {
                         loader: "sass-loader",
                         options: {
-                            outputStyle: 'compact'
+                            outputStyle: 'compact',
+                            includePaths: [bourbon]
                         }
                     }]
                 })

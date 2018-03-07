@@ -60,7 +60,7 @@ select {
 	padding:0;
 	margin:0;
 	letter-spacing:-1px;
-	box-sizing:border-box;
+	@include box-sizing(border-box);
 }
 dl,
 ul,
