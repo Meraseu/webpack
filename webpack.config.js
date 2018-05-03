@@ -1,4 +1,3 @@
-var webpack = require('webpack');
 var path = require('path');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -6,16 +5,17 @@ var CleanWebpackPlugin = require('clean-webpack-plugin');
 var bourbon = require('node-bourbon').includePaths;
 
 var extractPlugin = new ExtractTextPlugin({
-    filename: 'css/style.css'
+    filename: 'css/[name].css'
 });
 
 module.exports = {
     entry: {
-        'js/app': './src/js/app'
+        'index': './src/js/index',
+        'sub': './src/js/sub'
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: '[name].js'
+        filename: 'js/[name].bundle.js'
     },
     module: {
         rules: [
@@ -25,21 +25,23 @@ module.exports = {
                     {
                         loader: 'babel-loader',
                         options: {
-                            presets: ['env']
+                            presets: ['es2015']
                         }
                     }
-                ],
-                exclude: /node_modules/,
+                ]
             },
             {
                 test: /\.scss$/,
                 use: extractPlugin.extract({
                     use: [{
-                        loader: "css-loader"
+                        loader: "css-loader",
+                        options: {
+                            outputStyle: 'compact'
+                        }
                     }, {
                         loader: "sass-loader",
                         options: {
-                            outputStyle: 'compact',
+                            outputStyle: 'compressed', // nested, expanded, compact, compressed
                             includePaths: [bourbon]
                         }
                     }]
@@ -57,13 +59,13 @@ module.exports = {
                 ]
             },
             {
-                test: /\.(jpe?g|png|gif|svg)$/,
+                test: /\.(jpg|png)$/,
                 use: [
                     {
                         loader: 'file-loader',
                         options: {
                             name: '[name].[ext]',
-                            outputPath: 'img/'
+                            outputPath: 'img/',
                         }
                     },
                     'image-webpack-loader'
@@ -76,7 +78,13 @@ module.exports = {
         new CleanWebpackPlugin(['dist']),
         new HtmlWebpackPlugin({
             filename: 'index.html',
-            template: 'src/html/index.html'
+            template: 'src/html/index.html',
+            chunks: ['index']
+        }),
+        new HtmlWebpackPlugin({
+            filename: 'sub.html',
+            template: 'src/html/sub.html',
+            chunks: ['sub']
         })
     ]
 };
