@@ -1,13 +1,15 @@
-var path = require('path');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var CleanWebpackPlugin = require('clean-webpack-plugin');
+var path = require('path'),
+    webpack = require('webpack'),
+    ExtractTextPlugin = require('extract-text-webpack-plugin'),
+    HtmlWebpackPlugin = require('html-webpack-plugin'),
+    CleanWebpackPlugin = require('clean-webpack-plugin');
 
 var extractPlugin = new ExtractTextPlugin({
     filename: 'css/[name].css'
 });
 
-module.exports = {
+var config = {
+
     entry: {
         'index': './src/js/index',
         'sub': './src/js/sub'
@@ -35,12 +37,13 @@ module.exports = {
                     use: [{
                         loader: "css-loader",
                         options: {
-                            outputStyle: 'compact'
+                            minimize: false
                         }
                     }, {
                         loader: "sass-loader",
                         options: {
-                            outputStyle: 'compressed' // nested, expanded, compact, compressed
+                            data: '@import "./src/scss/config/_config.prod";',
+                            outputStyle: 'compact' // nested, expanded, compact, compressed
                         }
                     }]
                 })
@@ -69,7 +72,7 @@ module.exports = {
                     'image-webpack-loader'
                 ]
             }
-        ]
+        ],
     },
     plugins: [
         extractPlugin,
@@ -83,6 +86,10 @@ module.exports = {
             filename: 'sub.html',
             template: 'src/html/sub.html',
             chunks: ['sub']
+        }),
+        new webpack.DefinePlugin({
+            'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
         })
     ]
 };
+module.exports = config;
