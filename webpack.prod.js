@@ -39,7 +39,22 @@ var config = {
                         options: {
                             minimize: false
                         }
-                    }, {
+                    },
+                    {
+                        loader: 'clean-css-loader',
+                        options: {
+                            format: {
+                                breaks: {
+                                    afterRuleEnds: true
+                                },
+                                spaces: {
+                                    beforeBlockBegins: true
+                                },
+                                indentBy: 0,
+                            }
+                        }
+                    },
+                    {
                         loader: "sass-loader",
                         options: {
                             data: '@import "./src/scss/config/_config.prod";',
